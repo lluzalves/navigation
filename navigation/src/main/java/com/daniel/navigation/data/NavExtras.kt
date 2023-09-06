@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class NavExtras(
-    val navExtra : Parcelable = Bundle.EMPTY
+    var navExtra : Parcelable = Bundle.EMPTY
 ) : Parcelable{
 
 }

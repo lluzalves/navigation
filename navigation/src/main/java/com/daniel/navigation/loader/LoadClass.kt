@@ -5,13 +5,13 @@ import com.daniel.navigation.exception.NavigatorException
 
 private val classMap = mutableMapOf<String, Class<*>>()
 
-private inline fun <reified N : Any> Any.castOrNull() = this as? N
+private inline fun <reified N : Any> Any.castOrThrowException() = this as? N
 
-internal fun <N> String.loadClassOrNull(): Class<out N>? =
+internal fun <N> String.loadClassOrThrowException(): Class<out N>? =
     classMap.getOrPut(this) {
         try {
             Class.forName(this)
         } catch (e: ClassNotFoundException) {
             throw NavigatorException(e.localizedMessage, e.cause)
         }
-    }.castOrNull()
+    }.castOrThrowException()

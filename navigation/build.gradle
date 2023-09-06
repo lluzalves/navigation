@@ -1,9 +1,11 @@
+
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-parcelize'
 }
+apply plugin : 'maven-publish'
 
 android {
     namespace 'com.daniel.navigation'
@@ -29,6 +31,39 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+}
+
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
+def getVersionName = { ->
+    return "0.0.1"
+}
+
+def getArtificatId = { ->
+    return "navigation"
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.daniel.navigation'
+            artifactId getArtificatId()
+            version getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/lluzalves/navigation")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
     }
 }
 
